@@ -6,14 +6,12 @@ import { Loading } from "@/components";
 // 使用常量存储路由路径
 const ROUTES = {
   HOME: "/",
-  NEWCHAT: "/:sessionId",
   CHATHISTORY: "/chat/:sessionId",
   NOT_FOUND: "*",
 };
 
 // 使用 React.lazy 懒加载组件
 const Home = React.lazy(() => import("@/pages/Home"));
-const NewChat = React.lazy(() => import("@/pages/NewChat"));
 const ChatHistory = React.lazy(() => import("@/pages/ChatHistory"));
 const NotFound = React.lazy(() => import("@/components/NotFound"));
 
@@ -29,15 +27,6 @@ const router = [
           // <Suspense fallback={<Loading loading={true} className="h-full" />}>
           <Suspense>
             <Home />
-          </Suspense>
-        ),
-      },
-      {
-        path: ROUTES.NEWCHAT,
-        element: (
-          // <Suspense fallback={<Loading loading={true} className="h-full" />}>
-          <Suspense>
-            <NewChat />
           </Suspense>
         ),
       },
