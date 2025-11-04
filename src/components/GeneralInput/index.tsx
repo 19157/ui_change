@@ -68,6 +68,8 @@ const GeneralInput: GenieType.FC<Props> = (props) => {
     if (!question || disabled) {
       return;
     }
+    // 新建对话：先网络请求创建对话，再执行以下流程；如创建失败则直接return
+    // 历史对话：发送成功后再执行以下流程；如发送失败则直接return
     send({
       message: question,
       outputStyle: product?.type,
@@ -81,6 +83,8 @@ const GeneralInput: GenieType.FC<Props> = (props) => {
   };
 
   const sendMessage = () => {
+    // 新建对话：先网络请求创建对话，再执行以下流程；如创建失败则直接return
+    // 历史对话：发送成功后再执行以下流程；如发送失败则直接return
     send({
       message: question,
       outputStyle: product?.type,

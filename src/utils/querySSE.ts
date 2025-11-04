@@ -24,13 +24,15 @@ interface SSEConfig {
  */
 export default (config: SSEConfig, url: string = DEFAULT_SSE_URL): void => {
   const { body = null, handleMessage, handleError, handleClose } = config;
+  // const controller = new AbortController();
 
   fetchEventSource(url, {
     method: 'POST',
     credentials: 'include',
     headers: SSE_HEADERS,
     body: JSON.stringify(body),
-    openWhenHidden: true,
+    openWhenHidden: true,// 页面隐藏时保持连接
+    // signal: controller.signal,// 为中断请求做准备
     onmessage(event: EventSourceMessage) {
       if (event.data) {
         try {

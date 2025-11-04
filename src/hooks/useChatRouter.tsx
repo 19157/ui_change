@@ -53,7 +53,7 @@ export const useChatRouter = () => {
 
   // 返回首页
   const goToHome = useCallback(() => {
-    navigate("/");
+    navigate("/chat");
   }, [navigate]);
 
   return {
