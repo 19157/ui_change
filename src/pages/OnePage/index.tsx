@@ -88,7 +88,9 @@ const OnePage: GenieType.FC = () => {
           setCurrentChat(null);
           dispatch(setToken(""));
         },
-        onCancel() {},
+        onCancel() {
+          // messageApi.info('取消成功');
+        },
       });
     }
   };
@@ -249,7 +251,7 @@ const OnePage: GenieType.FC = () => {
         ) : (
           <div className="chat-title-container">
             <div className="chat-history-header-icon">
-              <Tooltip placement="bottom" title={"打开侧边栏"}>
+              <Tooltip placement="bottom" title={"展开对话记录"}>
                 <MenuUnfoldOutlined
                   className="new-chat-close"
                   onClick={() => {
@@ -279,7 +281,7 @@ const OnePage: GenieType.FC = () => {
         )}
         <div className="chat-outlet-container">
           {currentChat ? (
-            <div className="h-full flex flex-col items-center ">
+            <div className="h-full flex flex-col items-center">
               <ChatViewOnePage
                 inputInfo={inputInfo}
                 product={product}
@@ -288,7 +290,7 @@ const OnePage: GenieType.FC = () => {
               />
             </div>
           ) : (
-            <div className="h-full flex flex-col items-center ">
+            <div className="h-full flex flex-col items-center overflow-auto">
               {renderContent()}
             </div>
           )}

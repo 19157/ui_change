@@ -13,7 +13,7 @@ import ActionView from "@/components/ActionView";
 import { RESULT_TYPES } from "@/utils/constants";
 import { useMemoizedFn } from "ahooks";
 import classNames from "classnames";
-import { Modal } from "antd";
+import { Empty, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { setChatListStore } from "@/store/chatListStore";
 import moment from "moment";
@@ -45,6 +45,7 @@ const ChatViewOnePage: GenieType.FC<Props> = (props) => {
     openSpinLoading: () => {},
     closeSpinLoading: () => {},
   });
+  const [_, forceUpdate] = useState(0); // 用于强制更新
 
   const combineCurrentChat = (
     inputInfo: CHAT.TInputInfo,
@@ -223,21 +224,36 @@ const ChatViewOnePage: GenieType.FC<Props> = (props) => {
     }
   }, [props.currentChat, props.isNewChat]);
 
-  const loadingData = () => {
+  const loadingData = async () => {
     spinLoadingRef.current.openSpinLoading();
     setLoading(false);
-    const data: any[] = getChatData();
-    const index = Math.floor(Math.random() * 3);
-    if (index === 0) {
-      chatList.current = [data[0], data[1]];
-    } else if (index === 1) {
-      chatList.current = [data[1], data[2]];
-    } else {
-      chatList.current = [data[0], data[2]];
-    }
-    setTimeout(() => {
-      spinLoadingRef.current.closeSpinLoading();
-    }, 500);
+    chatList.current = [];
+
+    await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const data: any[] = getChatData();
+        const index = Math.floor(Math.random() * 3);
+        console.log("ChatViewOnePage-index=", index);
+        if (index === 0) {
+          resolve([data[0], data[1]]);
+        } else if (index === 1) {
+          resolve([data[1], data[2]]);
+        } else {
+          reject();
+        }
+      }, 1000);
+    })
+      .then((res: any) => {
+        chatList.current = res;
+        console.log("ChatViewOnePage-chatList.current", chatList.current);
+      })
+      .catch(() => {
+        chatList.current = [];
+      })
+      .finally(() => {
+        forceUpdate((prev) => prev + 1); // 强制重新渲染
+        spinLoadingRef.current.closeSpinLoading();
+      });
   };
 
   useEffect(() => {
@@ -255,7 +271,7 @@ const ChatViewOnePage: GenieType.FC<Props> = (props) => {
           })}
           id="chat-view"
         >
-          <div className="w-full flex justify-between">
+          {/* <div className="w-full flex justify-between">
             <div className="w-full flex items-center pb-8">
               {inputInfoProp.deepThink && (
                 <div className="rounded-[4px] px-6 border-1 border-solid border-gray-300 flex items-center shrink-0">
@@ -270,24 +286,30 @@ const ChatViewOnePage: GenieType.FC<Props> = (props) => {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
           <div
             className="w-full flex-1 overflow-auto no-scrollbar mb-[36px]"
             ref={chatRef}
           >
-            {chatList.current.map((chat) => {
-              return (
-                <div key={chat.sessionId}>
-                  <Dialogue
-                    chat={chat}
-                    deepThink={inputInfoProp.deepThink}
-                    changeTask={changeTask}
-                    changeFile={changeFile}
-                    changePlan={changePlan}
-                  />
-                </div>
-              );
-            })}
+            {chatList.current.length > 0 ? (
+              chatList.current.map((chat) => {
+                return (
+                  <div key={chat.sessionId}>
+                    <Dialogue
+                      chat={chat}
+                      deepThink={inputInfoProp.deepThink}
+                      changeTask={changeTask}
+                      changeFile={changeFile}
+                      changePlan={changePlan}
+                    />
+                  </div>
+                );
+              })
+            ) : (
+              <div className="flex flex-1 h-full w-full justify-center items-center">
+                <Empty description="暂无对话" />
+              </div>
+            )}
           </div>
           <GeneralInput
             placeholder={
