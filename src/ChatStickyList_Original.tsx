@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import './App.copy.css';
+import './ChatStickyList_Original.css';
 
 // 类型定义
 interface ChatSession {
@@ -194,7 +194,7 @@ const ChatSessionList: React.FC<{
   
   const containerRef = useRef<HTMLDivElement>(null);
   const headerRefs = useRef<Map<TimeCategory, HTMLDivElement>>(new Map());
-  const observerRef = useRef<IntersectionObserver>();
+  const observerRef = useRef<IntersectionObserver>(null);
 
   const categorizeSessions = useCallback((sessions: ChatSession[]): CategorizedSessions => {
     const now = new Date();

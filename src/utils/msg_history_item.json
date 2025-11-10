@@ -1,0 +1,335 @@
+{
+  "code": 200,
+  "message": "成功",
+  "data": [
+    {
+      "logId": 111,
+      "name": "string",
+      "createTime": "string",
+      "agentId": "string",
+      "deleted": false,
+      "sessionId": "string",
+      "requestId": "string",
+      "question": {
+        "query": "string",
+        "agentId": 1111,
+        "sessionId": "string",
+        "requestId": "string",
+        "file": {
+          "fileName": "string",
+          "ossUrl": "string",
+          "fileSize": 2222,
+          "domainUrl": "string"
+        },
+        "files": [
+          {
+            "fileName": "string",
+            "ossUrl": "string",
+            "fileSize": 1024,
+            "domainUrl": "string"
+          }
+        ],
+        "erp": "string",
+        "reAnswer": false,
+        "token": "string",
+        "extParams": {
+          "isMultiAgent": false
+        },
+        "type": "string",
+        "commandCode": "string",
+        "multiAgentReAnswer": false,
+        "traceId": "string",
+        "nextMessageKey": "string",
+        "isStream": "string",
+        "outputStyle": "string",
+        "callbackUrl": "string"
+      },
+      "answer": {
+        "status": "string",
+        "response": "string",
+        "responseAll": "string",
+        "finished": false,
+        "useTimes": 1024,
+        "useTokens": 1024,
+        "resultMap": {
+          "multiAgent?": {
+            "tasks": [
+              [
+                {
+                  "messageTime": "string",
+                  "task?": "string",
+                  "taskId?": "string",
+                  "messageType": "string",
+                  "resultMap": { "tips": "循环嵌套" },
+                  "requestId": "string",
+                  "messageId": "string",
+                  "finish": false,
+                  "isFinal": false,
+                  "toolThought?": "string",
+                  "digitalEmployee?": "string",
+                  "plan?": {
+                    "taskId?": "string",
+                    "notes": [""],
+                    "stages": [""],
+                    "title": "string",
+                    "stepStatus": [
+                      "'not_started' | 'in_progress' | 'completed'"
+                    ],
+                    "steps": [""]
+                  },
+                  "result?": "string",
+                  "toolResult?": {
+                    "toolName": "string",
+                    "toolResult": "string",
+                    "toolParam?": {
+                      "query": "string"
+                    }
+                  },
+                  "planThought?": "string",
+                  "id": "string"
+                }
+              ]
+            ],
+            "plan?": {
+              "taskId?": "string",
+              "notes": ["string"],
+              "stages": ["string"],
+              "title": "string",
+              "stepStatus": ["'not_started' | 'in_progress' | 'completed'"],
+              "steps": ["string"]
+            },
+            "plan_thought?": "string"
+          },
+          "eventResult?": {},
+          "agentType?": 1024,
+          "searchResult?": {
+            "docs": [
+              [
+                {
+                  "link": "string",
+                  "doc_type": "string",
+                  "title": "string",
+                  "content": "string"
+                }
+              ]
+            ],
+            "query": ["string"]
+          },
+          "messageType?": "string",
+          "requestId?": "string",
+          "query?": "string",
+          "isFinal?": false,
+          "searchFinish?": false,
+          "answer?": "string",
+          "taskSummary?": "string",
+          "fileList?": [
+            {
+              "fileName": "string",
+              "ossUrl": "string",
+              "fileSize": 1024,
+              "domainUrl": "string"
+            }
+          ],
+          "fileInfo?": [
+            {
+              "fileName": "string",
+              "ossUrl": "string",
+              "fileSize": 1024,
+              "domainUrl": "string"
+            }
+          ],
+          "command?": "string",
+          "data?": "string",
+          "codeOutput?": "string",
+          "requestsId?": "string",
+          "resultType?": "string",
+          "eventData?": {
+            "messageOrder": 1024,
+            "messageType": "string",
+            "resultMap": {
+              "multiAgent?": {
+                "tasks": [
+                  [
+                    {
+                      "messageTime": "string",
+                      "task?": "string",
+                      "taskId?": "string",
+                      "messageType": "string",
+                      "resultMap": { "tips": "循环嵌套" },
+                      "requestId": "string",
+                      "messageId": "string",
+                      "finish": false,
+                      "isFinal": false,
+                      "toolThought?": "string",
+                      "digitalEmployee?": "string",
+                      "plan?": {
+                        "taskId?": "string",
+                        "notes": [""],
+                        "stages": [""],
+                        "title": "string",
+                        "stepStatus": [
+                          "'not_started' | 'in_progress' | 'completed'"
+                        ],
+                        "steps": [""]
+                      },
+                      "result?": "string",
+                      "toolResult?": {
+                        "toolName": "string",
+                        "toolResult": "string",
+                        "toolParam?": {
+                          "query": "string"
+                        }
+                      },
+                      "planThought?": "string",
+                      "id": "string"
+                    }
+                  ]
+                ],
+                "plan?": {
+                  "taskId?": "string",
+                  "notes": ["string"],
+                  "stages": ["string"],
+                  "title": "string",
+                  "stepStatus": ["'not_started' | 'in_progress' | 'completed'"],
+                  "steps": ["string"]
+                },
+                "plan_thought?": "string"
+              },
+              "eventResult?": {},
+              "agentType?": 1024,
+              "searchResult?": {
+                "docs": [
+                  [
+                    {
+                      "link": "string",
+                      "doc_type": "string",
+                      "title": "string",
+                      "content": "string"
+                    }
+                  ]
+                ],
+                "query": ["string"]
+              },
+              "messageType?": "string",
+              "requestId?": "string",
+              "query?": "string",
+              "isFinal?": false,
+              "searchFinish?": false,
+              "answer?": "string",
+              "taskSummary?": "string",
+              "fileList?": [
+                {
+                  "fileName": "string",
+                  "ossUrl": "string",
+                  "fileSize": 1024,
+                  "domainUrl": "string"
+                }
+              ],
+              "fileInfo?": [
+                {
+                  "fileName": "string",
+                  "ossUrl": "string",
+                  "fileSize": 1024,
+                  "domainUrl": "string"
+                }
+              ],
+              "command?": "string",
+              "data?": "string",
+              "codeOutput?": "string",
+              "requestsId?": "string",
+              "resultType?": "string",
+              "eventData?": {
+                "messageOrder": 1024,
+                "messageType": "string",
+                "resultMap": {
+                  "messageTime": "string",
+                  "task?": "string",
+                  "taskId?": "string",
+                  "messageType": "string",
+                  "resultMap": { "tips": "循环嵌套" },
+                  "requestId": "string",
+                  "messageId": "string",
+                  "finish": false,
+                  "isFinal": false,
+                  "toolThought?": "string",
+                  "digitalEmployee?": "string",
+                  "plan?": {
+                    "taskId?": "string",
+                    "notes": [""],
+                    "stages": [""],
+                    "title": "string",
+                    "stepStatus": [
+                      "'not_started' | 'in_progress' | 'completed'"
+                    ],
+                    "steps": [""]
+                  },
+                  "result?": "string",
+                  "toolResult?": {
+                    "toolName": "string",
+                    "toolResult": "string",
+                    "toolParam?": {
+                      "query": "string"
+                    }
+                  },
+                  "planThought?": "string",
+                  "id": "string"
+                },
+                "messageId": "string",
+                "taskId": "string",
+                "taskOrder": 1024
+              },
+              "code?": "string",
+              "tip?": "string",
+              "task?": "string",
+              "refList?": [
+                {
+                  "name": "string",
+                  "pageContent": "string",
+                  "sourceUrl": "string"
+                }
+              ],
+              "steps": [
+                {
+                  "status": "string",
+                  "goal": "string"
+                }
+              ]
+            },
+            "messageId": "string",
+            "taskId": "string",
+            "taskOrder": 1024
+          },
+          "code?": "string",
+          "tip?": "string",
+          "task?": "string",
+          "refList?": [
+            {
+              "name": "string",
+              "pageContent": "string",
+              "sourceUrl": "string"
+            }
+          ],
+          "steps": [
+            {
+              "status": "string",
+              "goal": "string"
+            }
+          ]
+        },
+        "responseType": "string",
+        "voiceUrl": "string",
+        "traceId": "string",
+        "reqId?": "string",
+        "encrypted": false,
+        "thinkContent?": "string",
+        "thinkStatus?": "string",
+        "runningLog": "string",
+        "query": "string",
+        "messages": "string",
+        "packageType": "string",
+        "errorMsg": "string"
+      },
+      "taskStatus": 1
+    }
+  ]
+}
