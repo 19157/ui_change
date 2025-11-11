@@ -1,4 +1,5 @@
 import { fetchEventSource, EventSourceMessage } from '@microsoft/fetch-event-source';
+import { useRef } from 'react';
 
 const customHost = SERVICE_BASE_URL || '';
 const DEFAULT_SSE_URL = `${customHost}/web/api/v1/gpt/queryAgentStreamIncr`;
@@ -24,7 +25,15 @@ interface SSEConfig {
  */
 export default (config: SSEConfig, url: string = DEFAULT_SSE_URL): void => {
   const { body = null, handleMessage, handleError, handleClose } = config;
-  // const controller = new AbortController();
+
+  // const abortControllerRef = useRef<AbortController | null>(null);
+  // const getAbortController = () => {
+  //   if (abortControllerRef.current) {
+  //     abortControllerRef.current.abort();
+  //   }
+  //   abortControllerRef.current = new AbortController();
+  //   return abortControllerRef.current;
+  // };
 
   fetchEventSource(url, {
     method: 'POST',
@@ -32,7 +41,7 @@ export default (config: SSEConfig, url: string = DEFAULT_SSE_URL): void => {
     headers: SSE_HEADERS,
     body: JSON.stringify(body),
     openWhenHidden: true,// 页面隐藏时保持连接
-    // signal: controller.signal,// 为中断请求做准备
+    // signal: getAbortController().signal,// 为中断请求做准备
     onmessage(event: EventSourceMessage) {
       if (event.data) {
         try {

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 import GeneralInput from "@/components/GeneralInput";
 import Slogn from "@/components/Slogn";
 import ChatViewOnePage from "@/components/ChatViewOnePage";
@@ -33,9 +33,23 @@ const OnePage: GenieType.FC = () => {
   const [showList, setShowList] = useState<boolean>(true); // 是否隐藏侧边栏标志
   const [isNewChat, setIsNewChat] = useState(true);
 
-  const changeInputInfo = useCallback((info: CHAT.TInputInfo) => {
+  const changeInputInfo = (info: CHAT.TInputInfo) => {
+    // 新建对话在这里创建
+    let id = getSessionId();
+    const newItem = {
+      sessionId: id,
+      query: info.message,
+      title: info.message,
+      tasks: [],
+      createdAt: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+      updatedAt: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+    };
+    dispatch(setChatListStore([newItem, ...chatListStore]));
+    setCurrentChat(newItem);
+    setIsNewChat(true);
+
     setInputInfo(info);
-  }, []);
+  };
 
   useEffect(() => {
     // 初始化全局 message
@@ -43,26 +57,7 @@ const OnePage: GenieType.FC = () => {
   }, [messageApi]);
 
   useEffect(() => {
-    dispatch(setChatListStore([]));
-    setTimeout(() => {
-      const list: any[] = [];
-      for (let index = 0; index < 20; index++) {
-        let sessionId = getSessionId();
-        list.push({
-          sessionId: sessionId + "_" + index,
-          query: "chat_" + (index + 1) + "_" + sessionId,
-          title: "chat_" + (index + 1) + "_" + sessionId,
-          tasks: [],
-          createdAt: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-          updatedAt: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-        });
-      }
-      dispatch(setChatListStore(list));
-    }, 2000);
-  }, []);
-
-  useEffect(() => {
-    console.log("OnePage--currentChat=", currentChat);
+    console.log("OnePage---currentChat=", currentChat);
     setInputInfo({
       message: "",
       deepThink: false,
@@ -85,7 +80,6 @@ const OnePage: GenieType.FC = () => {
         okText: "确定",
         cancelText: "取消",
         onOk() {
-          setCurrentChat(null);
           dispatch(setToken(""));
         },
         onCancel() {
@@ -145,18 +139,16 @@ const OnePage: GenieType.FC = () => {
         </div>
       );
     }
-    return (
-      <ChatViewOnePage
-        inputInfo={inputInfo}
-        product={product}
-        setChatCallback={(chat: any) => {
-          console.log("setChatCallback");
-          setCurrentChat(chat);
-          setIsNewChat(true);
-        }}
-        isNewChat={isNewChat}
-      />
-    );
+    // 这个地方好像永远也执行不到
+    // return (
+    //   <ChatViewOnePage
+    //     inputInfo={inputInfo}
+    //     product={product}
+    //     currentChat={currentChat}
+    //     isNewChat={isNewChat}
+    //   />
+    // );
+    return null;
   };
 
   return (

@@ -3,7 +3,6 @@ import {
   getUniqId,
   scrollToTop,
   ActionViewItemEnum,
-  getSessionId,
 } from "@/utils";
 import querySSE from "@/utils/querySSE";
 import { handleTaskData, combineData } from "@/utils/chat";
@@ -14,17 +13,13 @@ import { RESULT_TYPES } from "@/utils/constants";
 import { useMemoizedFn } from "ahooks";
 import classNames from "classnames";
 import { Empty, Modal } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import { setChatListStore } from "@/store/chatListStore";
-import moment from "moment";
 import { SpinLoadingActionType } from "../SpinLoadingFunction";
 import { getChatData } from "@/utils/chat_data";
 
 type Props = {
   inputInfo: CHAT.TInputInfo;
-  product?: CHAT.Product;
-  currentChat?: any;
-  setChatCallback?: (chat: any) => void;
+  product: CHAT.Product;
+  currentChat: any;
   isNewChat: boolean;
 };
 
@@ -39,8 +34,6 @@ const ChatViewOnePage: GenieType.FC<Props> = (props) => {
   const chatRef = useRef<HTMLInputElement>(null);
   const actionViewRef = ActionView.useActionView();
   const [modal, contextHolder] = Modal.useModal();
-  const dispatch = useDispatch();
-  const { chatListStore } = useSelector((state: any) => state.chatListStore);
   const spinLoadingRef = useRef<SpinLoadingActionType>({
     openSpinLoading: () => {},
     closeSpinLoading: () => {},
@@ -72,7 +65,7 @@ const ChatViewOnePage: GenieType.FC<Props> = (props) => {
   // 深度思考
   const sendMessage = useMemoizedFn((inputInfo: CHAT.TInputInfo) => {
     const { message, deepThink, searchEnabled, outputStyle } = inputInfo;
-    const sessionId = getSessionId();
+    const sessionId = props.currentChat?.sessionId;
     const requestId = getUniqId();
     let currentChat = combineCurrentChat(inputInfo, sessionId, requestId);
     chatList.current = [...chatList.current, currentChat];
@@ -85,28 +78,7 @@ const ChatViewOnePage: GenieType.FC<Props> = (props) => {
       searchEnabled: searchEnabled ? 1 : 0,
       outputStyle,
     };
-
-    // todo 测试
-    console.log("测试---", props.currentChat);
-    if (!props.currentChat) {
-      const targetItem = chatListStore.find(
-        (itemChat: any) => itemChat.id === sessionId
-      );
-      if (!targetItem) {
-        const newItem = {
-          sessionId: sessionId,
-          query: "chat_" + sessionId,
-          title: "chat_" + sessionId,
-          tasks: [],
-          createdAt: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-          updatedAt: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-        };
-        dispatch(setChatListStore([newItem, ...chatListStore]));
-        setTimeout(() => {
-          props.setChatCallback && props.setChatCallback(newItem);
-        }, 500);
-      }
-    }
+    console.log('sendMessage---params=', params);
 
     const handleMessage = (data: MESSAGE.Answer) => {
       const { finished, resultMap, packageType, status } = data;
@@ -245,7 +217,6 @@ const ChatViewOnePage: GenieType.FC<Props> = (props) => {
     })
       .then((res: any) => {
         chatList.current = res;
-        console.log("ChatViewOnePage-chatList.current", chatList.current);
       })
       .catch(() => {
         chatList.current = [];
@@ -256,12 +227,6 @@ const ChatViewOnePage: GenieType.FC<Props> = (props) => {
       });
   };
 
-  useEffect(() => {
-    return () => {
-      console.log("ChatViewOnePage---卸载了");
-    };
-  }, []);
-
   const renderMultAgent = () => {
     return (
       <div className="h-full w-full flex justify-center">
@@ -271,22 +236,6 @@ const ChatViewOnePage: GenieType.FC<Props> = (props) => {
           })}
           id="chat-view"
         >
-          {/* <div className="w-full flex justify-between">
-            <div className="w-full flex items-center pb-8">
-              {inputInfoProp.deepThink && (
-                <div className="rounded-[4px] px-6 border-1 border-solid border-gray-300 flex items-center shrink-0">
-                  <i className="font_family icon-shendusikao mr-6 text-[12px]"></i>
-                  <span className="ml-[-4px]">深度研究</span>
-                </div>
-              )}
-              {inputInfoProp.searchEnabled && (
-                <div className="rounded-[4px] ml-10 px-6 border-1 border-solid border-gray-300 flex items-center shrink-0">
-                  <i className="font_family icon-lianwangsousuo mr-6 text-[12px]"></i>
-                  <span className="ml-[-4px]">联网搜索</span>
-                </div>
-              )}
-            </div>
-          </div> */}
           <div
             className="w-full flex-1 overflow-auto no-scrollbar mb-[36px]"
             ref={chatRef}
@@ -327,6 +276,7 @@ const ChatViewOnePage: GenieType.FC<Props> = (props) => {
                 searchEnabled: inputInfoProp.searchEnabled, // 多轮问答也不支持切换searchEnabled，使用传进来的
               })
             }
+            newSessionId={props.currentChat?.sessionId}
           />
         </div>
         {contextHolder}

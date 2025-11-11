@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Input, Button, Tooltip } from "antd";
+import { Input, Button, Tooltip, Upload, UploadFile, UploadProps } from "antd";
 import classNames from "classnames";
 import { TextAreaRef } from "antd/es/input/TextArea";
-import { getOS } from "@/utils";
+import { getOS, showMessage } from "@/utils";
+import { CloseCircleOutlined, PaperClipOutlined, UploadOutlined } from "@ant-design/icons";
+import "./index.css";
 
 const { TextArea } = Input;
 
@@ -23,10 +25,61 @@ const GeneralInput: GenieType.FC<Props> = (props) => {
   const [deepThink, setDeepThink] = useState<boolean>(false);
   const [searchEnabled, setSearchEnabled] = useState<boolean>(false);
   const textareaRef = useRef<TextAreaRef>(null);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const tempData = useRef<{
     cmdPress?: boolean;
     compositing?: boolean;
   }>({});
+
+  const uploadProps: UploadProps = {
+    multiple: true,
+    beforeUpload: (file, list) => {
+      if (fileList.length + list.length > 5) {
+        showMessage()?.info("附件最多支持5个");
+        return false;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        showMessage()?.info("单个文件大小5M以内");
+        return false;
+      }
+      setFileList((fileList) => [...fileList, file]);
+      return true;
+    },
+    progress: {
+      strokeColor: {
+        '0%': '#108ee9',
+        '100%': '#87d068',
+      },
+      strokeWidth: 3,
+      format: (percent) => percent && `${Number.parseFloat(percent.toFixed(2))}%`,
+    },
+    onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log('文件上传中...');
+      }
+      if (info.file.status === 'done') {
+        console.log('文件上传成功');
+      } else if (info.file.status === 'error') {
+        console.log('文件上传失败');
+      }
+    },
+    fileList,
+    showUploadList: false,
+  };
+
+  const translateSize = (size: number) => {
+    if (size < 1024) {
+      return `${size}B`;
+    }
+    if (size < 1024 * 1024) {
+      return `${(size / 1024).toFixed(2)}KB`;
+    }
+    return `${(size / 1024 / 1024).toFixed(2)}MB`;
+  };
+
+  const deleteFile = (index: number) => {
+    setFileList((fileList) => fileList.filter((_, i) => i !== index));
+  };
 
   const questionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setQuestion(e.target.value);
@@ -70,6 +123,10 @@ const GeneralInput: GenieType.FC<Props> = (props) => {
     }
     // 新建对话：先网络请求创建对话，再执行以下流程；如创建失败则直接return
     // 历史对话：发送成功后再执行以下流程；如发送失败则直接return
+    if (!question.trim()) {
+      showMessage()?.info('输入为空');
+      return;
+    }
     send({
       message: question,
       outputStyle: product?.type,
@@ -85,6 +142,10 @@ const GeneralInput: GenieType.FC<Props> = (props) => {
   const sendMessage = () => {
     // 新建对话：先网络请求创建对话，再执行以下流程；如创建失败则直接return
     // 历史对话：发送成功后再执行以下流程；如发送失败则直接return
+    if (!question.trim()) {
+      showMessage()?.info('输入为空');
+      return;
+    }
     send({
       message: question,
       outputStyle: product?.type,
@@ -103,7 +164,37 @@ const GeneralInput: GenieType.FC<Props> = (props) => {
   }, [props.newSessionId]);
 
   return (
-    <div className={showBtn ? "rounded-[12px] bg-[linear-gradient(to_bottom_right,#4040ff,#ff49fd,#d763fc,#3cc4fa)] p-1" : ""}>
+    <div className={showBtn ? "rounded-[12px] p-1" : ""}>
+      {fileList.length > 0 && (
+        <div className="upload-list">
+          {fileList.map((file: any, index: number) => {
+            return (
+              <div className={`file-item`} key={index}>
+                <div style={{display: 'flex', flexDirection: 'row'}}>
+                  <span className="file-name" title={file.name}>
+                    {file.name}
+                  </span>
+                </div>
+                <span>
+                  {file.progress}
+                </span>
+                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                  <PaperClipOutlined className="file-icon" />
+                  <span className="file-size">({translateSize(file.size)})</span>
+                </div>
+                <span
+                  className="delete"
+                  onClick={() => {
+                    deleteFile(index);
+                  }}
+                >
+                  <CloseCircleOutlined />
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      )}
       <div className="rounded-[12px] border border-[#E9E9F0] overflow-hidden p-[12px] bg-[#fff]">
         <div className="relative">
           <TextArea
@@ -171,7 +262,14 @@ const GeneralInput: GenieType.FC<Props> = (props) => {
             <div></div>
           )}
           <div className="flex items-center">
-            <span className="text-[12px] text-gray-300 mr-8 flex items-center">{enterTip}</span>
+            {/* <Upload {...uploadProps} disabled={disabled} customRequest={() => {}}>
+              <Tooltip title="最多支持5个文件，单个文件大小5M以内">
+                <UploadOutlined />
+              </Tooltip>
+            </Upload> */}
+            <span className="text-[12px] text-gray-300 mr-8 ml-8 flex items-center">
+              {enterTip}
+            </span>
             <Tooltip title="发送">
               <i
                 className={`font_family icon-fasongtianchong ${!question || disabled ? "cursor-not-allowed text-[#ccc] pointer-events-none" : "cursor-pointer"}`}
