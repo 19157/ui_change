@@ -6,6 +6,12 @@ export { default as NotFound } from './NotFound';
 
 export { default as ChatView } from './ChatView';
 
+export { default as ChatViewHistory } from './ChatViewHistory';
+
+export { default as ChatViewOnePage } from './ChatViewOnePage';
+
+export { default as ChatStickyList } from './ChatStickyList';
+
 export { default as LoadingSpinner } from './LoadingSpinner';
 
 export { default as Slogn } from './Slogn';
