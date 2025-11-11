@@ -38,7 +38,7 @@ export const useChatRouter = () => {
   // 切换到历史对话，不触发路由监听
   const switchToChatNoDispatch = useCallback(
     (targetSessionId: any) => {
-      silentNavigate(`/chat/${targetSessionId}`, {}, true);
+      silentNavigate(`/chat/${targetSessionId}`, { replace: true }, true);
     },
     [silentNavigate]
   );

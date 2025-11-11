@@ -1,4 +1,3 @@
-// import ChatView from "@/components/ChatView";
 import ChatViewHistory from "@/components/ChatViewHistory";
 import { defaultProduct } from "@/utils/constants";
 import { useParams } from "react-router-dom";

@@ -11,7 +11,7 @@ const Login: GenieType.FC = () => {
           dispatch(setToken("dukun"));
         }}
       >
-        立即登录
+        登录（统一认证）
       </div>
     </div>
   );
