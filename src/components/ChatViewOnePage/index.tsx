@@ -1,9 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import {
-  getUniqId,
-  scrollToTop,
-  ActionViewItemEnum,
-} from "@/utils";
+import { getUniqId, scrollToTop, ActionViewItemEnum } from "@/utils";
 import querySSE from "@/utils/querySSE";
 import { handleTaskData, combineData } from "@/utils/chat";
 import Dialogue from "@/components/Dialogue";
@@ -14,7 +10,7 @@ import { useMemoizedFn } from "ahooks";
 import classNames from "classnames";
 import { Empty, Modal } from "antd";
 import { SpinLoadingActionType } from "../SpinLoadingFunction";
-import { getChatData } from "@/utils/chat_data";
+import { getChatTestData } from "@/utils/chat_data";
 
 type Props = {
   inputInfo: CHAT.TInputInfo;
@@ -78,7 +74,7 @@ const ChatViewOnePage: GenieType.FC<Props> = (props) => {
       searchEnabled: searchEnabled ? 1 : 0,
       outputStyle,
     };
-    console.log('sendMessage---params=', params);
+    console.log("sendMessage---params=", params);
 
     const handleMessage = (data: MESSAGE.Answer) => {
       const { finished, resultMap, packageType, status } = data;
@@ -203,16 +199,8 @@ const ChatViewOnePage: GenieType.FC<Props> = (props) => {
 
     await new Promise((resolve, reject) => {
       setTimeout(() => {
-        const data: any[] = getChatData();
-        const index = Math.floor(Math.random() * 3);
-        console.log("ChatViewOnePage-index=", index);
-        if (index === 0) {
-          resolve([data[0], data[1]]);
-        } else if (index === 1) {
-          resolve([data[1], data[2]]);
-        } else {
-          reject();
-        }
+        const data: any[] = getChatTestData();
+        resolve(data);
       }, 1000);
     })
       .then((res: any) => {

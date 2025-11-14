@@ -22,7 +22,7 @@ const ChatHistory: GenieType.FC<ChatProps> = () => {
   };
 
   return (
-    <div className="flex-1 flex-col items-center">
+    <div className="w-full h-full flex-1 flex-col items-center">
       {renderContent()}
     </div>
   );
